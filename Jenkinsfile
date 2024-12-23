@@ -10,21 +10,30 @@ pipeline {
         stage('Install Python') {
             steps {
                 sh '''
+                set -e  # Exit immediately if a command exits with a non-zero status
+        
                 # Define Python version and download URL
                 PYTHON_VERSION=3.10.9
-                PYTHON_TAR=https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
-
-                # Download and extract Python
-                curl -O $PYTHON_TAR
-                tar -xzf Python-$PYTHON_VERSION.tgz
-
-                # Build and install Python
+                PYTHON_TAR_URL=https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
+                PYTHON_TAR_FILE=Python-$PYTHON_VERSION.tgz
+        
+                echo "Downloading Python $PYTHON_VERSION..."
+                curl -O $PYTHON_TAR_URL
+        
+                echo "Extracting Python tarball..."
+                tar -xzf $PYTHON_TAR_FILE
+        
+                echo "Building and installing Python..."
                 cd Python-$PYTHON_VERSION
                 ./configure --enable-optimizations
-                make
+                make -j$(nproc)  # Use all available CPU cores for faster build
                 sudo make install
-
-                # Verify installation
+        
+                echo "Cleaning up temporary files..."
+                cd ..
+                rm -rf Python-$PYTHON_VERSION $PYTHON_TAR_FILE
+        
+                echo "Verifying Python installation..."
                 python3 --version
                 pip3 --version
                 '''
