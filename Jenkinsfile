@@ -6,6 +6,29 @@ pipeline {
         // KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     }
+    stage('Install Python') {
+            steps {
+                sh '''
+                # Define Python version and download URL
+                PYTHON_VERSION=3.10.9
+                PYTHON_TAR=https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION.tgz
+
+                # Download and extract Python
+                curl -O $PYTHON_TAR
+                tar -xzf Python-$PYTHON_VERSION.tgz
+
+                # Build and install Python
+                cd Python-$PYTHON_VERSION
+                ./configure --enable-optimizations
+                make
+                sudo make install
+
+                # Verify installation
+                python3 --version
+                pip3 --version
+                '''
+            }
+        }
     stages {
         stage('Setup') {
             steps {
