@@ -7,13 +7,6 @@ pipeline {
 
     }
     stages {
-
-        stage('Checkout') {
-            steps {
-                git url: 'https://github.com/Gautam0210/jenkins-project.git', branch: 'main'
-                sh "ls -ltr"
-            }
-        }
         stage('Setup') {
             steps {
                 sh "pip install -r requirements.txt"
@@ -49,11 +42,11 @@ pipeline {
                 echo "Docker image push successfully"
             }
         }
-        stage('Deploy to EKS Cluster') {
-            steps {
-                sh "kubectl apply -f deployment.yaml"
-                echo "Deployed to EKS Cluster"
-            }
-        }
+        // stage('Deploy to EKS Cluster') {
+        //     steps {
+        //         sh "kubectl apply -f deployment.yaml"
+        //         echo "Deployed to EKS Cluster"
+        //     }
+        // }
     }
 }
