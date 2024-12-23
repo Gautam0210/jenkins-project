@@ -6,7 +6,8 @@ pipeline {
         // KUBECONFIG = credentials('kubeconfig-credentials-id')
 
     }
-    stage('Install Python') {
+    stages {
+        stage('Install Python') {
             steps {
                 sh '''
                 # Define Python version and download URL
@@ -29,7 +30,6 @@ pipeline {
                 '''
             }
         }
-    stages {
         stage('Setup') {
             steps {
                 sh "pip install -r requirements.txt"
