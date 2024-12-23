@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = 'sanjeevkt720/jenkins-flask-app'
+        IMAGE_NAME = 'gautam1998/jenkins-flask-app'
         IMAGE_TAG = "${IMAGE_NAME}:${env.BUILD_NUMBER}"
         KUBECONFIG = credentials('kubeconfig-credentials-id')
 
@@ -10,7 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/kodekloudhub/jenkins-project.git', branch: 'main'
+                git url: 'https://github.com/Gautam0210/jenkins-project.git', branch: 'main'
                 sh "ls -ltr"
             }
         }
@@ -28,7 +28,7 @@ pipeline {
         stage('Login to docker hub') {
             steps {
                 withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
-                sh 'echo ${dockerhubpwd} | docker login -u sanjeevkt720 --password-stdin'}
+                sh 'echo ${dockerhubpwd} | docker login -u gautam1998 --password-stdin'}
                 echo 'Login successfully'
             }
         }
